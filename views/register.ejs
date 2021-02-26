@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <%- include bootstrap %>
+  </head>
+  <body>
+    <%- include layout %>
+    <div class="container">
+      <h1 class="text-center">Register Form</h1>
+
+      <% if(locals.errors) { %>
+      <ul class="alert alert-danger">
+        <% Object.values(errors).forEach(function(error){ %>
+        <li><%- error.msg %></li>
+        <%}) %>
+      </ul>
+      <% } %>
+
+      <form class="form-group" action="/users/register" method="post">
+        <div class="form-group">
+          <label for="">Username :</label>
+          <input
+            class="form-control"
+            type="text"
+            name="name"
+            value=""
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="">E-mail :</label>
+          <input class="form-control" type="email" name="email" value="" />
+        </div>
+        <div class="form-group">
+          <label for="">Password :</label>
+          <input
+            class="form-control"
+            type="password"
+            name="password"
+            value=""
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+    </div>
+  </body>
+</html>
