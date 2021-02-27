@@ -1,13 +1,16 @@
+// Router
+
 const { log } = require("console");
 var express = require("express");
-
 
 var router = express.Router();
 
 const User = require("../models/user");
 
 const { check, validationResult } = require("express-validator");
-const { isRegExp } = require("util");
+
+var passport = require("passport"),
+  LocalStrategy = require("passport-local").Strategy;
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
@@ -41,7 +44,7 @@ router.post(
         if (err) throw err;
         else {
           console.log("Save success", user);
-          res.redirect('/');
+          res.redirect("/");
         }
       });
     }
@@ -53,9 +56,62 @@ router.get("/login", (req, res) => {
   res.render("login");
 });
 
-router.post("/login", (req, res) => {
-  const user = ({ name, password } = req.body);
-  console.log(req.body);
+//Logout page
+router.get("/logout", (req, res) => {
+  req.logOut();
+  res.redirect('/');
 });
+
+
+
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    failureRedirect: "/users/login",
+    failureFlash: true,
+    // successRedirect: "/",
+  }),
+  (req, res) => {
+    // const user = ({ name, password } = req.body);
+    // console.log(req.body);
+    req.flash('success','ลงชื่อเข้าใช้เรียบร้อยแล้ว')
+    res.redirect("/"); 
+  }
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+passport.deserializeUser((id, done) => {
+  User.getUserById(id, (err, user) => {
+    done(err, user);
+  });
+});
+
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    console.log(`Username = ${username} , Password = ${password}`);
+    User.getUserByName(username, (err, user) => {
+      // console.log("LocalStrategy", user);
+      if (err) throw err;
+      if (!user) {
+        console.log("ไม่พบผู้ใช้งานในระบบ!!");
+        return done(null, false);
+      } else {
+        //ถอดรหัส password ตรวจสอบ password ว่าตรงกันไหม
+        User.verifyPassword(password, user.password, (err, isMatch) => {
+          if (err) throw err;
+          if(isMatch){
+            return done(null, user);
+          }else{
+            console.log("รหัสผ่านไม่ถูกต้อง");
+            return done(null, false);
+          }
+        });
+      }
+      
+    });
+  })
+);
 
 module.exports = router;

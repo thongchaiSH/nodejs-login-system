@@ -11,10 +11,11 @@
     <%- include layout %>
     <div class="container">
       <h1 class="text-center">Login Form</h1>
-      <form class="form-group" action="/user/register" method="post">
+      <%- messages()  %> 
+      <form class="form-group" action="/users/login" method="post">
         <div class="form-group">
             <label for="">Username :</label>
-            <input class="form-control" type="text" name="name" value="">
+            <input class="form-control" type="text" name="username" value="">
         </div>
         <div class="form-group">
             <label for="">Password :</label>
@@ -25,4 +26,7 @@
         </form>
     </div>
 </body>
+<script type="text/javascript">
+    $('#messages').addClass('alert alert-danger')
+</script>
 </html>

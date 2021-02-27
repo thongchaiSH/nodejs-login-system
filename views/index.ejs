@@ -3,15 +3,23 @@
   <head>
     <title><%= title %></title>
     <!-- <link rel='stylesheet' href='/stylesheets/style.css' /> -->
-    <%- include  bootstrap %> 
+    <%- include bootstrap %>
   </head>
   <body>
     <%- include layout %>
 
     <div class="container">
-      <h1><%= title %></h1>
-      <p>Welcome to <%= title %></p>
-    </div>
+      
+      <h1 class="text-center">Welcome to Login System</h1>
+      <%- messages()  %> 
 
+      <% if (user) { %>
+        <h3><%- user.name %></h3>
+        <h3><%- user.email %></h3>
+      <% } %>
+    </div>
   </body>
+  <script>
+    $('#messages').addClass('alert alert-success')
+  </script>
 </html>

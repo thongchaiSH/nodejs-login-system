@@ -8,7 +8,7 @@ npm i
 
 ## Install Package
 ```
-npm i express-validator express-message mongoose mongod bcryptjs
+npm i express express-validator express-messages mongoose mongod bcryptjs passport passport-local passport-http express-session connect-flash
 ```
 
 ## Run Project
